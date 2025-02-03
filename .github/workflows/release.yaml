@@ -9,10 +9,14 @@ on:
 permissions:
   contents: write
   pages: write
+  id-token: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -27,10 +31,20 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v3
 
+      - name: Add Helm repos
+        run: |
+          helm repo add helm-shared https://samirspatel.github.io/helm-shared
+          helm repo update
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
+
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.7.0
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
           charts_dir: charts
-          config: cr.yaml 
+          config: cr.yaml
+        env:
+          CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CR_SKIP_EXISTING: true 

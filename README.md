@@ -127,13 +127,28 @@ Before the release process can work, ensure:
 
 1. GitHub Pages is enabled for your repository:
    - Go to repository Settings > Pages
-   - Set the Source to "Deploy from a branch"
-   - Select the `gh-pages` branch and root directory (/)
+   - Under "Build and deployment":
+     - Source: "GitHub Actions"
+     - Branch: `gh-pages` (it will be created automatically)
    - Save the configuration
 
 2. Required repository permissions are configured (automatically set in workflow):
    - `contents: write` - For creating releases
    - `pages: write` - For updating GitHub Pages
+   - `id-token: write` - For GitHub Pages deployment
+
+3. Repository Settings:
+   - Ensure the repository is public (required for GitHub Pages)
+   - Under Settings > Actions > General:
+     - Enable "Read and write permissions" under "Workflow permissions"
+     - Check "Allow GitHub Actions to create and approve pull requests"
+
+4. First-time setup:
+   - The first push to main/chart branch will:
+     - Create the gh-pages branch
+     - Set up the GitHub Pages environment
+     - Create the initial release
+   - This might take a few minutes to complete
 
 ### Release Configuration
 
