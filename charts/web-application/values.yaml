@@ -9,9 +9,9 @@ deployment:
   replicas: 1
   
   image:
-    repository: nginx
+    repository: crccheck/hello-world
     tag: latest
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
   
   resources:
     requests:
@@ -30,8 +30,8 @@ deployment:
 # Service configuration
 service:
   type: ClusterIP
-  port: 80
-  targetPort: 80
+  port: 8000
+  targetPort: 8000
 
 # Ingress configuration
 ingress:
@@ -61,4 +61,6 @@ secret:
 # Environment variables
 env:
   - name: APP_NAME
-    value: "web-application" 
+    value: "hello-world"
+  - name: APP_ENV
+    value: "local" 
