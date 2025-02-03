@@ -2,14 +2,14 @@ apiVersion: v2
 name: web-application
 description: A reusable Helm chart for Kubernetes web applications
 type: application
-version: 0.1.0
-appVersion: "1.0.0"
+version: 0.1.2
+appVersion: "1.0.2"
 home: https://github.com/samirspatel/web-application
 sources:
   - https://github.com/samirspatel/web-application
 maintainers:
   - name: Samir Patel
-    email: me@samirpatel.me
+    email: sameg14@gmail.com
 keywords:
   - web
   - application
