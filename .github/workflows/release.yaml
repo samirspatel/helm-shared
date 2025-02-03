@@ -5,7 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'charts/**'
+      - 'charts/**/*'  # Match any file under charts directory
+      - '.github/workflows/release.yaml'  # Also run when workflow file changes
 
 permissions:
   contents: write
@@ -23,6 +24,19 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Debug Information
+        run: |
+          echo "Current directory contents:"
+          ls -la
+          echo "\nCharts directory contents:"
+          ls -la charts/ || echo "Charts directory not found"
+          echo "\nGit status:"
+          git status
+          echo "\nLast commit:"
+          git log -1
+          echo "\nChanged files in last commit:"
+          git diff-tree --no-commit-id --name-only -r HEAD
 
       - name: Configure Git
         run: |
