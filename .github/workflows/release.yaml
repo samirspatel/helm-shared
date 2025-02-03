@@ -47,6 +47,17 @@ jobs:
         id: check-changes
         run: |
           CHANGED_CHARTS=()
+          
+          # Check for workflow file changes
+          if git diff --quiet HEAD^ HEAD .github/workflows/release.yaml; then
+            echo "No changes in workflow file"
+          else
+            echo "Changes detected in workflow file"
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          
+          # Check for chart changes
           for chart in charts/*/; do
             if git diff --quiet HEAD^ HEAD "$chart"; then
               echo "No changes in $chart"
