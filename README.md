@@ -217,3 +217,33 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## Support
 
 For support, please open an issue in the GitHub repository.
+
+## Local Development
+
+To quickly set up a local development environment with k3d:
+
+1. Make sure you have the following prerequisites installed:
+   - [k3d](https://k3d.io/)
+   - [kubectl](https://kubernetes.io/docs/tasks/tools/)
+   - [Helm](https://helm.sh/docs/intro/install/)
+
+2. Run the start script:
+   ```bash
+   ./scripts/start-cluster.sh
+   ```
+
+   This script will:
+   - Create a k3d cluster with proper port mappings
+   - Configure local domain in /etc/hosts
+   - Install the Helm chart
+   - Wait for everything to be ready
+
+3. Access your application at:
+   ```
+   http://web-application.local
+   ```
+
+To clean up:
+```bash
+k3d cluster delete demo
+```
