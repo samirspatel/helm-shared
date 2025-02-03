@@ -19,6 +19,7 @@ spec:
         {{- with .Values.deployment.labels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
+        app.kubernetes.io/version: {{ .Values.appVersion | default .Chart.AppVersion | quote }}
       {{- with .Values.deployment.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
@@ -26,7 +27,7 @@ spec:
     spec:
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.deployment.image.repository }}:{{ .Values.deployment.image.tag }}"
+          image: "{{ .Values.deployment.image.repository }}:{{ .Values.appVersion | default .Values.deployment.image.tag }}"
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           ports:
             - name: http
