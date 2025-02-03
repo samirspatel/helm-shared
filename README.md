@@ -28,7 +28,7 @@ helm repo update
 Install the chart:
 
 ```bash
-helm install my-release helm-shared/web-application
+helm upgrade --install my-app helm-shared/web-application --set fullnameOverride=my-app
 ```
 
 ## Configuration

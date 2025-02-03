@@ -1,8 +1,12 @@
 # Default values for the application
 
+# Name override options
+nameOverride: ""
+fullnameOverride: ""
+
 # Deployment configuration
 deployment:
-  name: web-application
+  name: 
   replicas: 1
   
   image:
