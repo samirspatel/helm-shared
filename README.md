@@ -229,7 +229,7 @@ To quickly set up a local development environment with k3d:
 
 2. Run the start script:
    ```bash
-   ./scripts/start-cluster.sh
+   ./scripts/start-local-cluster.sh
    ```
 
    This script will:
