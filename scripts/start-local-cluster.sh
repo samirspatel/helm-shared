@@ -1,5 +1,28 @@
 #!/bin/bash
 
+# Check and install required tools
+check_and_install_brew() {
+    if ! command -v brew &> /dev/null; then
+        echo "🍺 Homebrew not found. Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+}
+
+check_and_install_tool() {
+    local tool=$1
+    if ! command -v "$tool" &> /dev/null; then
+        echo "📦 $tool not found. Installing $tool..."
+        brew install "$tool"
+    else
+        echo "✅ $tool is already installed"
+    fi
+}
+
+# Install required tools
+check_and_install_brew
+check_and_install_tool "k3d"
+check_and_install_tool "helm"
+
 # Get the directory where the script is located
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CHART_DIR="$SCRIPT_DIR/../charts/web-application"
