@@ -32,9 +32,10 @@ service:
 
 # Ingress configuration
 ingress:
-  enabled: false
-  className: ""
-  annotations: {}
+  enabled: true
+  className: "traefik"
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
   hosts:
     - host: web-application.local
       paths:
