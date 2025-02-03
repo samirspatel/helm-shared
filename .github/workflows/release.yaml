@@ -150,9 +150,31 @@ jobs:
                       border-radius: 12px;
                       font-size: 12px;
                       font-weight: 500;
-                      background: #e1e4e8;
+                      margin-left: 8px;
                   }
-                  .latest { background: #2ea44f; color: white; }
+                  .latest {
+                      background: #2ea44f;
+                      color: white;
+                  }
+                  .version {
+                      background: #e1e4e8;
+                      color: #24292e;
+                  }
+                  .chart-name {
+                      font-weight: 600;
+                      color: #0366d6;
+                  }
+                  .description {
+                      color: #586069;
+                      max-width: 400px;
+                  }
+                  .install-cmd {
+                      background: #1b1f23;
+                      color: #fff;
+                      padding: 1rem;
+                      border-radius: 6px;
+                      font-family: monospace;
+                  }
               </style>
           </head>
           <body>
@@ -160,7 +182,7 @@ jobs:
               
               <div class="install-box">
                   <p><strong>Add this repository to Helm:</strong></p>
-                  <pre>helm repo add helm-shared https://samirspatel.github.io/helm-shared
+                  <pre class="install-cmd">helm repo add helm-shared https://samirspatel.github.io/helm-shared
           helm repo update</pre>
               </div>
               
@@ -183,21 +205,46 @@ jobs:
           python3 -c '
           import yaml
           import datetime
+          from collections import defaultdict
+          
+          def format_date(date_str):
+              dt = datetime.datetime.strptime(date_str[:19], "%Y-%m-%dT%H:%M:%S")
+              return dt.strftime("%Y-%m-%d %H:%M")
           
           with open(".cr-release-packages/index.yaml", "r") as f:
               index = yaml.safe_load(f)
           
+          # Group entries by chart name
+          chart_groups = defaultdict(list)
+          for name, entries in index["entries"].items():
+              for entry in entries:
+                  chart_groups[name].append(entry)
+          
+          # Sort each group by version (semver)
+          for name, entries in chart_groups.items():
+              entries.sort(key=lambda x: [int(i) for i in x["version"].split(".")], reverse=True)
+          
           with open(".cr-pages/index.html", "a") as f:
-              for name, entries in index["entries"].items():
-                  for chart in sorted(entries, key=lambda x: x["version"], reverse=True):
-                      created = datetime.datetime.strptime(chart["created"][:19], "%Y-%m-%dT%H:%M:%S").strftime("%Y-%m-%d %H:%M")
-                      latest_badge = " <span class=\"badge latest\">latest</span>" if chart == entries[0] else ""
+              for name, entries in sorted(chart_groups.items()):
+                  # First entry in sorted list is latest
+                  latest_version = entries[0]["version"]
+                  
+                  # Output all versions
+                  for chart in entries:
+                      version = chart["version"]
+                      is_latest = version == latest_version
+                      latest_badge = " <span class=\"badge latest\">latest</span>" if is_latest else ""
+                      
+                      created = format_date(chart["created"])
+                      
                       f.write(f"""
                           <tr>
-                              <td>{chart["name"]}</td>
-                              <td>{chart["version"]}{latest_badge}</td>
+                              <td class="chart-name">{chart["name"]}</td>
+                              <td>
+                                  <span class="badge version">{version}</span>{latest_badge}
+                              </td>
                               <td>{chart.get("appVersion", "N/A")}</td>
-                              <td>{chart["description"]}</td>
+                              <td class="description">{chart["description"]}</td>
                               <td>{created}</td>
                           </tr>
                       """)
@@ -210,10 +257,14 @@ jobs:
               
               <h2>Usage</h2>
               <p>To install a specific version:</p>
-              <pre>helm install my-release helm-shared/CHART_NAME --version VERSION</pre>
+              <pre class="install-cmd">helm install my-release helm-shared/CHART_NAME --version VERSION</pre>
               
               <p>To install the latest version:</p>
-              <pre>helm install my-release helm-shared/CHART_NAME</pre>
+              <pre class="install-cmd">helm install my-release helm-shared/CHART_NAME</pre>
+              
+              <div class="install-box">
+                  <p><strong>Note:</strong> Replace <code>CHART_NAME</code> with the name of the chart you want to install (e.g., web-application)</p>
+              </div>
           </body>
           </html>
           EOF
