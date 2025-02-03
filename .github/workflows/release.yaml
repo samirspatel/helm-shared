@@ -33,10 +33,6 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v4
 
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v4
-
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.7.0
         with:
@@ -47,10 +43,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CR_SKIP_EXISTING: true
 
+      - name: Create Pages Directory
+        run: |
+          mkdir -p .cr-pages
+          cp -R .cr-release-packages/* .cr-pages/ || true
+          cp .cr-index/index.yaml .cr-pages/index.yaml || true
+
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .cr-release-packages
+          path: .cr-pages
 
       - name: Deploy to GitHub Pages
         id: deployment

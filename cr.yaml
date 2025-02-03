@@ -1,8 +1,8 @@
 owner: samirspatel
 git-base-url: https://api.github.com/
 charts-repo: https://samirspatel.github.io/helm-shared
-index-path: ./.cr-index/index.yaml
-package-path: ./.cr-release-packages
+index-path: .cr-index/index.yaml
+package-path: .cr-release-packages
 pages-branch: gh-pages
 generate-release-notes: true
 sign: false 
