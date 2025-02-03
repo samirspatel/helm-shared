@@ -30,12 +30,11 @@ jobs:
       - name: Install Helm
         uses: azure/setup-helm@v3
 
-      - name: Add Helm repos
-        run: |
-          helm repo add helm-shared https://samirspatel.github.io/helm-shared
-          helm repo update
-
       - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Setup Pages
+        id: pages
         uses: actions/configure-pages@v4
 
       - name: Run chart-releaser
@@ -46,4 +45,15 @@ jobs:
         env:
           CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CR_SKIP_EXISTING: true 
+          CR_SKIP_EXISTING: true
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .cr-release-packages
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }} 
