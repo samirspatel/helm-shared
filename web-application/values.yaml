@@ -1,0 +1,58 @@
+# Default values for the application
+
+# Deployment configuration
+deployment:
+  name: 
+  replicas: 1
+  
+  image:
+    repository: nginx
+    tag: latest
+    pullPolicy: IfNotPresent
+  
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+  # Pod annotations
+  podAnnotations: {}
+  
+  # Additional labels
+  labels: {}
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 80
+
+# Ingress configuration
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: web-application.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+# ConfigMap configuration
+configMap:
+  enabled: false
+  data: {}
+
+# Secret configuration
+secret:
+  enabled: false
+  data: {}
+
+# Environment variables
+env:
+  - name: APP_NAME
+    value: "web-application" 
