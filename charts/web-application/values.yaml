@@ -30,7 +30,11 @@ deployment:
 # Service configuration
 service:
   type: ClusterIP
+  # The port that the service will be exposed on within the cluster
+  # Other pods/services will use this port to communicate with this service
   port: 8000
+  # The port that the container is listening on inside the pod
+  # This is where your application actually runs and accepts connections
   targetPort: 8000
 
 # Ingress configuration
