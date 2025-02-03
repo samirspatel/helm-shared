@@ -1,6 +1,6 @@
 apiVersion: v2
 name: web-application
-description: A reusable Helm chart for Kubernetes web applications
+description: A reusable Helm chart for Kubernetes web apps
 type: application
 version: 0.11.0
 appVersion: "0.11.0"
