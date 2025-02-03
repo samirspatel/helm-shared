@@ -6,7 +6,6 @@ fullnameOverride: ""
 
 # Deployment configuration
 deployment:
-  name: "web-application"
   replicas: 1
   
   image:
@@ -30,16 +29,19 @@ deployment:
 
 # Service configuration
 service:
-  type: ClusterIP
+  type: NodePort
   port: 80
   targetPort: 80
+  nodePort: 30080
 
 # Ingress configuration
 ingress:
   enabled: true
   className: "traefik"
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
+    traefik.ingress.kubernetes.io/router.entrypoints: "web"
+    traefik.ingress.kubernetes.io/router.middlewares: "default-redirect-https@kubernetescrd"
+    kubernetes.io/ingress.class: traefik
   hosts:
     - host: web-application.local
       paths:
