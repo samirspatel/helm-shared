@@ -6,6 +6,10 @@ on:
       - main
       - chart
 
+permissions:
+  contents: write
+  pages: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -26,4 +30,7 @@ jobs:
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.7.0
         env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}" 
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          charts_dir: charts
+          config: cr.yaml 

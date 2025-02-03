@@ -1,0 +1,6 @@
+owner: samirspatel
+git-base-url: https://api.github.com/
+charts-repo: https://samirspatel.github.io/helm-shared
+index-path: ./index.yaml
+pages-branch: gh-pages
+generate-release-notes: true 

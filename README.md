@@ -121,7 +121,37 @@ helm install my-release helm-shared/web-application -f values.yaml
 
 This chart uses GitHub Actions for automated releases. The release process is triggered when changes are pushed to the `main` or `chart` branches.
 
-The release workflow:
+### Prerequisites
+
+Before the release process can work, ensure:
+
+1. GitHub Pages is enabled for your repository:
+   - Go to repository Settings > Pages
+   - Set the Source to "Deploy from a branch"
+   - Select the `gh-pages` branch and root directory (/)
+   - Save the configuration
+
+2. Required repository permissions are configured (automatically set in workflow):
+   - `contents: write` - For creating releases
+   - `pages: write` - For updating GitHub Pages
+
+### Release Configuration
+
+The release process is configured through two files:
+
+1. `.github/workflows/release.yaml` - GitHub Actions workflow file that:
+   - Triggers on pushes to `main` or `chart` branches
+   - Sets up Helm and Git configuration
+   - Uses chart-releaser action to package and publish charts
+
+2. `cr.yaml` - Chart Releaser configuration file that defines:
+   - Repository owner and URLs
+   - GitHub Pages configuration
+   - Release notes generation
+
+### Release Process Steps
+
+The automated release workflow:
 1. Checks out the repository
 2. Configures Git with the GitHub Actions bot
 3. Installs Helm
@@ -129,12 +159,37 @@ The release workflow:
    - Package the Helm chart
    - Create a new GitHub release
    - Update the Helm repository index
+   - Deploy to GitHub Pages
 
-New versions are automatically released based on the version specified in `Chart.yaml`. To release a new version:
+### Creating a New Release
+
+To release a new version:
 
 1. Update the `version` field in `charts/web-application/Chart.yaml`
 2. Commit and push your changes to the main branch
-3. The GitHub Action will automatically create a new release
+3. The GitHub Action will automatically:
+   - Create a new release tagged with the chart version
+   - Generate release notes
+   - Update the Helm repository index
+   - Make the new version available for installation
+
+### Verifying a Release
+
+After a release is complete, you can verify it by:
+
+1. Updating the local Helm repository cache:
+   ```bash
+   helm repo update helm-shared
+   ```
+
+2. Searching for available versions:
+   ```bash
+   helm search repo helm-shared/web-application
+   ```
+
+3. Viewing the release on GitHub:
+   - Go to the repository's Releases page
+   - The new version should be listed with generated release notes
 
 ## Contributing
 
