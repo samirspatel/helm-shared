@@ -46,8 +46,14 @@ jobs:
       - name: Create Pages Directory
         run: |
           mkdir -p .cr-pages
+          # Create a simple index.html
+          echo "<html><head><title>Helm Chart Repository</title></head><body><h1>Helm Chart Repository</h1><p>Add this repository to Helm:</p><pre>helm repo add helm-shared https://samirspatel.github.io/helm-shared</pre></body></html>" > .cr-pages/index.html
+          # Copy chart packages and index
           cp -R .cr-release-packages/* .cr-pages/ || true
           cp .cr-index/index.yaml .cr-pages/index.yaml || true
+          # Debug: List contents
+          echo "Contents of .cr-pages:"
+          ls -la .cr-pages/
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3

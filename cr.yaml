@@ -5,4 +5,5 @@ index-path: .cr-index/index.yaml
 package-path: .cr-release-packages
 pages-branch: gh-pages
 generate-release-notes: true
-sign: false 
+sign: false
+release-name-template: "{{ .Version }}" 
