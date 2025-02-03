@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'charts/**'
 
 permissions:
   contents: write
@@ -27,43 +29,53 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
+      - name: Check for chart changes
+        id: check-changes
+        run: |
+          CHANGED_CHARTS=()
+          for chart in charts/*/; do
+            if git diff --quiet HEAD^ HEAD "$chart"; then
+              echo "No changes in $chart"
+            else
+              echo "Changes detected in $chart"
+              CHART_NAME=$(basename "$chart")
+              CHANGED_CHARTS+=("$CHART_NAME")
+              # Get current versions
+              CHART_YAML="$chart/Chart.yaml"
+              CURRENT_VERSION=$(grep '^version:' "$CHART_YAML" | awk '{print $2}')
+              MAJOR=$(echo "$CURRENT_VERSION" | cut -d. -f1)
+              MINOR=$(echo "$CURRENT_VERSION" | cut -d. -f2)
+              PATCH=$(echo "$CURRENT_VERSION" | cut -d. -f3)
+              
+              # Bump minor version and reset patch
+              NEW_VERSION="$MAJOR.$((MINOR + 1)).0"
+              
+              # Update version in Chart.yaml
+              sed -i "s/^version: .*/version: $NEW_VERSION/" "$CHART_YAML"
+              
+              # Commit the change
+              git add "$CHART_YAML"
+              git commit -m "chore: Bump $CHART_NAME version to $NEW_VERSION [skip ci]"
+            fi
+          done
+          
+          if [ ${#CHANGED_CHARTS[@]} -gt 0 ]; then
+            echo "::set-output name=has_changes::true"
+            git push
+          else
+            echo "::set-output name=has_changes::false"
+          fi
+
       - name: Install Helm
+        if: steps.check-changes.outputs.has_changes == 'true'
         uses: azure/setup-helm@v3
 
       - name: Configure GitHub Pages
+        if: steps.check-changes.outputs.has_changes == 'true'
         uses: actions/configure-pages@v4
 
-      - name: Bump Chart Version
-        run: |
-          # Read current versions
-          CHART_YAML="charts/web-application/Chart.yaml"
-          
-          # Get major.minor.patch parts
-          CURRENT_VERSION=$(grep '^version:' $CHART_YAML | awk '{print $2}')
-          MAJOR=$(echo $CURRENT_VERSION | cut -d. -f1)
-          MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
-          PATCH=$(echo $CURRENT_VERSION | cut -d. -f3)
-          
-          CURRENT_APP_VERSION=$(grep '^appVersion:' $CHART_YAML | awk '{print $2}' | tr -d '"')
-          APP_MAJOR=$(echo $CURRENT_APP_VERSION | cut -d. -f1)
-          APP_MINOR=$(echo $CURRENT_APP_VERSION | cut -d. -f2)
-          APP_PATCH=$(echo $CURRENT_APP_VERSION | cut -d. -f3)
-          
-          # Bump minor versions and reset patch to 0
-          NEW_VERSION="$MAJOR.$((MINOR + 1)).0"
-          NEW_APP_VERSION="$APP_MAJOR.$((APP_MINOR + 1)).0"
-          
-          # Update versions in Chart.yaml
-          sed -i.bak "s/^version: .*/version: $NEW_VERSION/" $CHART_YAML
-          sed -i.bak "s/^appVersion: .*/appVersion: \"$NEW_APP_VERSION\"/" $CHART_YAML
-          rm -f ${CHART_YAML}.bak
-          
-          # Commit and push the changes
-          git add $CHART_YAML
-          git commit -m "chore: Bump minor version to $NEW_VERSION and appVersion to $NEW_APP_VERSION [skip ci]"
-          git push
-
       - name: Package Charts
+        if: steps.check-changes.outputs.has_changes == 'true'
         run: |
           mkdir -p .cr-release-packages
           mkdir -p .cr-index
@@ -75,6 +87,7 @@ jobs:
           cp .cr-release-packages/index.yaml .cr-index/index.yaml
 
       - name: Create Pages Directory
+        if: steps.check-changes.outputs.has_changes == 'true'
         run: |
           mkdir -p .cr-pages
           # Create a simple index.html
@@ -86,11 +99,13 @@ jobs:
           ls -la .cr-pages/
 
       - name: Upload Pages Artifact
+        if: steps.check-changes.outputs.has_changes == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: .cr-pages
 
       - name: Deploy to GitHub Pages
+        if: steps.check-changes.outputs.has_changes == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
         with:
