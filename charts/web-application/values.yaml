@@ -29,19 +29,18 @@ deployment:
 
 # Service configuration
 service:
-  type: NodePort
+  type: ClusterIP
   port: 80
   targetPort: 80
-  nodePort: 30080
 
 # Ingress configuration
 ingress:
   enabled: true
   className: "traefik"
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: "web"
-    traefik.ingress.kubernetes.io/router.middlewares: "default-redirect-https@kubernetescrd"
     kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.middlewares: ""
+    traefik.frontend.passHostHeader: "true"
   hosts:
     - host: web-application.local
       paths:
