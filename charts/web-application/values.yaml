@@ -1,4 +1,4 @@
-### Default values for the application
+# Default values for the application
 
 # Name override options
 nameOverride: ""
