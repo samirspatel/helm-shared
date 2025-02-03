@@ -24,6 +24,8 @@ jobs:
         uses: azure/setup-helm@v3
 
       - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.5.0
+        uses: helm/chart-releaser-action@v1.7.0
+        with:
+          charts_repo_url: "https://samirspatel.github.io/helm-shared"
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}" 
