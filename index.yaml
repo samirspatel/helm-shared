@@ -2,6 +2,30 @@ apiVersion: v1
 entries:
   web-application:
   - apiVersion: v2
+    appVersion: 1.0.1
+    created: "2025-02-03T02:12:32.442679302Z"
+    description: A reusable Helm chart for Kubernetes web applications
+    digest: f82bef50a05ad3a45198df61d4887aef861901e08f5bfb0c5b9751d15e6c8295
+    home: https://github.com/samirspatel/web-application
+    keywords:
+    - web
+    - application
+    - kubernetes
+    - helm
+    - shared
+    - reusable
+    - web-application
+    maintainers:
+    - email: sameg14@gmail.com
+      name: Samir Patel
+    name: web-application
+    sources:
+    - https://github.com/samirspatel/web-application
+    type: application
+    urls:
+    - https://github.com/samirspatel/helm-shared/releases/download/web-application-0.1.1/web-application-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     appVersion: 1.0.0
     created: "2025-02-03T02:09:56.926206605Z"
     description: A reusable Helm chart for Kubernetes web applications
@@ -25,4 +49,4 @@ entries:
     urls:
     - https://github.com/samirspatel/helm-shared/releases/download/web-application-0.1.0/web-application-0.1.0.tgz
     version: 0.1.0
-generated: "2025-02-03T02:09:56.926230079Z"
+generated: "2025-02-03T02:12:32.442686385Z"
