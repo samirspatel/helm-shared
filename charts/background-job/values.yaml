@@ -1,0 +1,125 @@
+# Default values for background-job chart
+
+# Name override options
+nameOverride: ""
+fullnameOverride: ""
+
+# Job type configuration
+# Can be either "job" or "cronjob"
+jobType: "cronjob"
+
+# Job configuration
+job:
+  # Number of retries before marking as failed
+  backoffLimit: 3
+  # Time limit for job execution (in seconds)
+  activeDeadlineSeconds: 600
+  # TTL for completed jobs (in seconds)
+  ttlSecondsAfterFinished: 3600
+  # Parallelism for job pods
+  parallelism: 1
+  # Completions required for job success
+  completions: 1
+  # Suspend job execution
+  suspend: false
+
+# CronJob specific configuration
+cronjob:
+  # Cron schedule expression
+  schedule: "*/5 * * * *"
+  # Timezone for the schedule (empty = UTC)
+  timezone: ""
+  # Deadline for starting jobs (in seconds)
+  startingDeadlineSeconds: 60
+  # Concurrency policy: Allow, Forbid, or Replace
+  concurrencyPolicy: "Forbid"
+  # Number of successful jobs to retain
+  successfulJobsHistoryLimit: 3
+  # Number of failed jobs to retain
+  failedJobsHistoryLimit: 1
+  # Suspend cronjob execution
+  suspend: false
+
+# Pod configuration
+pod:
+  # Image configuration
+  image:
+    repository: busybox
+    tag: latest
+    pullPolicy: IfNotPresent
+
+  # Resource requests and limits
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+  # Security context for the pod
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+
+  # Node selector
+  nodeSelector: {}
+
+  # Tolerations
+  tolerations: []
+
+  # Affinity rules
+  affinity: {}
+
+  # Service account
+  serviceAccount:
+    create: false
+    name: ""
+    annotations: {}
+
+  # Pod annotations
+  annotations: {}
+
+  # Additional labels
+  labels: {}
+
+# Environment variables
+env: []
+# - name: ENV_VAR_NAME
+#   value: "value"
+# - name: SECRET_ENV_VAR
+#   valueFrom:
+#     secretKeyRef:
+#       name: secret-name
+#       key: secret-key
+
+# ConfigMap configuration
+configMap:
+  enabled: false
+  data: {}
+  # key: value
+
+# Secret configuration
+secret:
+  enabled: false
+  data: {}
+  # key: base64-encoded-value
+
+# Command and arguments
+command: []
+# - /bin/sh
+# - -c
+
+args: []
+# - echo "Hello World"
+
+# Volume mounts
+volumes: []
+# - name: config-volume
+#   configMap:
+#     name: special-config
+
+volumeMounts: []
+# - name: config-volume
+#   mountPath: /etc/config

@@ -1,0 +1,24 @@
+{{- if eq .Values.jobType "job" }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "background-job.fullname" . }}
+  labels:
+    {{- include "background-job.labels" . | nindent 4 }}
+    {{- with .Values.pod.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  backoffLimit: {{ .Values.job.backoffLimit }}
+  {{- if .Values.job.activeDeadlineSeconds }}
+  activeDeadlineSeconds: {{ .Values.job.activeDeadlineSeconds }}
+  {{- end }}
+  {{- if .Values.job.ttlSecondsAfterFinished }}
+  ttlSecondsAfterFinished: {{ .Values.job.ttlSecondsAfterFinished }}
+  {{- end }}
+  parallelism: {{ .Values.job.parallelism }}
+  completions: {{ .Values.job.completions }}
+  suspend: {{ .Values.job.suspend }}
+  template:
+    {{- include "background-job.podTemplate" . | nindent 4 }}
+{{- end }} 

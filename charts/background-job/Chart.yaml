@@ -1,0 +1,20 @@
+apiVersion: v2
+name: background-job
+description: A reusable Helm chart for deploying background jobs in Kubernetes
+type: application
+version: 0.1.0
+home: https://github.com/samirspatel/helm-shared
+sources:
+  - https://github.com/samirspatel/helm-shared
+maintainers:
+  - name: Samir Patel
+    email: sameg14@gmail.com
+keywords:
+  - job
+  - cronjob
+  - background
+  - batch
+  - kubernetes
+  - helm
+  - shared
+  - reusable
