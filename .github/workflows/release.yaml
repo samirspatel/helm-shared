@@ -29,6 +29,10 @@ jobs:
 
       - name: Install Helm
         uses: azure/setup-helm@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add dependency repositories
         run: |
@@ -43,3 +47,4 @@ jobs:
           CR_INDEX_PATH: ".cr-index/index.yaml"
           CR_OWNER: "samirspatel"
           CR_GIT_REPO: "helm-shared"
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
