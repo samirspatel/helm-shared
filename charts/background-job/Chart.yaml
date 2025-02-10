@@ -2,7 +2,7 @@ apiVersion: v2
 name: background-job
 description: A reusable Helm chart for deploying background jobs in Kubernetes
 type: application
-version: 0.6.0
+version: 1.1.0
 home: https://github.com/samirspatel/helm-shared
 sources:
   - https://github.com/samirspatel/helm-shared
