@@ -46,13 +46,13 @@ if [ ! -d "$CHART_DIR" ]; then
 fi
 
 # Check if cluster exists
-if ! k3d cluster list | grep -q "demo"; then
-    echo "🚀 Creating new k3d cluster..."
-    k3d cluster create demo \
+if ! k3d cluster list | grep -q "local"; then
+    echo "Creating k3d cluster..."
+    k3d cluster create local \
         --api-port 6550 \
-        --agents 1 \
         --port "80:80@loadbalancer" \
         --port "443:443@loadbalancer" \
+        --k3s-arg '--disable=traefik@server:0' \
         --wait
 
     echo "⏳ Waiting for cluster to be ready..."
@@ -60,9 +60,9 @@ if ! k3d cluster list | grep -q "demo"; then
 
     # Pre-pull the nginx image to all nodes
     echo "📥 Pre-pulling required images..."
-    k3d image import nginx:latest -c demo
+    k3d image import nginx:latest -c local
 else
-    echo "✅ Using existing k3d cluster 'demo'"
+    echo "✅ Using existing k3d cluster 'local'"
 fi
 
 # Add local domain to /etc/hosts if not already present
@@ -125,7 +125,7 @@ while [ $i -le $TIMEOUT ]; do
 done
 
 echo "✨ Setup complete! Your cluster is ready."
-echo "🌐 You can access your application at: http://web-application.local"
+echo "🌐 You can access the sample web application at: http://web-application.local"
 echo ""
 echo "Useful commands:"
 echo "  kubectl get pods,svc,ingress    # Check resources"
