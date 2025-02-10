@@ -2,7 +2,7 @@ apiVersion: v2
 name: web-application
 description: A reusable Helm chart for deploying simple web applications in Kubernetes
 type: application
-version: 0.4.0
+version: 0.5.0
 home: https://github.com/samirspatel/web-application
 sources:
   - https://github.com/samirspatel/web-application
