@@ -2,9 +2,9 @@ apiVersion: v1
 entries:
   background-job:
   - apiVersion: v2
-    created: "2025-02-10T21:52:17.385014656Z"
+    created: "2025-02-10T21:59:35.312420021Z"
     description: A reusable Helm chart for deploying background jobs in Kubernetes
-    digest: 61749309b7390fb84aae82090b93aa31c148e013b24a70aa22c4c799b4a9a248
+    digest: 95ccebbb4f59913f18ee06f17e0eaba662e3948e236f497131960469c8209d61
     home: https://github.com/samirspatel/helm-shared
     keywords:
     - job
@@ -23,7 +23,7 @@ entries:
     - https://github.com/samirspatel/helm-shared
     type: application
     urls:
-    - https://github.com/samirspatel/helm-shared/releases/download/background-job-0.5.0/background-job-0.5.0.tgz
+    - https://samirspatel.github.io/helm-shared/background-job-0.5.0.tgz
     version: 0.5.0
   - apiVersion: v2
     appVersion: 0.3.0
@@ -76,10 +76,9 @@ entries:
     version: 0.2.0
   web-application:
   - apiVersion: v2
-    appVersion: 0.6.0
-    created: "2025-02-10T21:38:28.949829927Z"
+    created: "2025-02-10T21:59:35.312841112Z"
     description: A reusable Helm chart for deploying simple web applications in Kubernetes
-    digest: 4dab4d550652f2dc6306547e10b9226930700072eba3f9e8021ffbf6c8efc477
+    digest: 5eba03de2d5db75f6f16f6b8fddfdefb813f41cdb76821fbc2cf965e21060330
     home: https://github.com/samirspatel/web-application
     keywords:
     - web
@@ -97,7 +96,7 @@ entries:
     - https://github.com/samirspatel/web-application
     type: application
     urls:
-    - https://github.com/samirspatel/helm-shared/releases/download/web-application-0.6.0/web-application-0.6.0.tgz
+    - https://samirspatel.github.io/helm-shared/web-application-0.6.0.tgz
     version: 0.6.0
   - apiVersion: v2
     created: "2025-02-10T21:20:01.408622781Z"
@@ -194,4 +193,4 @@ entries:
     urls:
     - https://github.com/samirspatel/helm-shared/releases/download/web-application-0.1.0/web-application-0.1.0.tgz
     version: 0.1.0
-generated: "2025-02-10T21:52:17.385036487Z"
+generated: "2025-02-10T21:59:35.311908049Z"
