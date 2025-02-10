@@ -38,13 +38,44 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
 
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.7.0
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          CR_SKIP_EXISTING: "true"  # Skip releases that already exist
-          CR_PACKAGE_PATH: ".cr-release-packages"
-          CR_INDEX_PATH: ".cr-index/index.yaml"
-          CR_OWNER: "samirspatel"
-          CR_GIT_REPO: "helm-shared"
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Package Charts
+        run: |
+          # Create temporary directory for chart packages
+          mkdir -p .cr-release-packages
+          
+          # Package each chart
+          for chart in charts/*/; do
+            if [ -f "$chart/Chart.yaml" ]; then
+              echo "Packaging chart: $chart"
+              helm package "$chart" -d .cr-release-packages/
+            fi
+          done
+
+      - name: Checkout gh-pages
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+          path: gh-pages
+          fetch-depth: 0
+
+      - name: Update Repository
+        run: |
+          # Copy new chart packages
+          cp .cr-release-packages/* gh-pages/
+          cd gh-pages
+          
+          # Generate new index.yaml or merge with existing
+          if [ -f index.yaml ]; then
+            helm repo index . --url https://samirspatel.github.io/helm-shared --merge index.yaml
+          else
+            helm repo index . --url https://samirspatel.github.io/helm-shared
+          fi
+          
+          # Commit and push if there are changes
+          git add .
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update Helm repository"
+            git push origin gh-pages
+          fi
