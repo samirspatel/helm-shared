@@ -2,7 +2,31 @@ apiVersion: v1
 entries:
   background-job:
   - apiVersion: v2
-    created: "2025-02-10T22:03:53.66820846Z"
+    created: "2025-02-10T22:06:01.583736286Z"
+    description: A reusable Helm chart for deploying background jobs in Kubernetes
+    digest: 32e8ab8e17e4b7a27735eb06fd840b167383a169df5520bd3a8e444c2c0deb63
+    home: https://github.com/samirspatel/helm-shared
+    keywords:
+    - job
+    - cronjob
+    - background
+    - batch
+    - kubernetes
+    - helm
+    - shared
+    - reusable
+    maintainers:
+    - email: sameg14@gmail.com
+      name: Samir Patel
+    name: background-job
+    sources:
+    - https://github.com/samirspatel/helm-shared
+    type: application
+    urls:
+    - background-job-0.6.0.tgz
+    version: 0.6.0
+  - apiVersion: v2
+    created: "2025-02-10T22:06:01.583377896Z"
     description: A reusable Helm chart for deploying background jobs in Kubernetes
     digest: c910a641c9eb62baddf70b6373ad31851b4298e81d9017ad019ff8f206b00b46
     home: https://github.com/samirspatel/helm-shared
@@ -76,7 +100,30 @@ entries:
     version: 0.2.0
   web-application:
   - apiVersion: v2
-    created: "2025-02-10T22:03:53.668630111Z"
+    created: "2025-02-10T22:06:01.584544486Z"
+    description: A reusable Helm chart for deploying simple web applications in Kubernetes
+    digest: b8175feaaad62cf81309afba03072160453521cfba237db6a6e45d622f773f8c
+    home: https://github.com/samirspatel/web-application
+    keywords:
+    - web
+    - application
+    - kubernetes
+    - helm
+    - shared
+    - reusable
+    - web-application
+    maintainers:
+    - email: sameg14@gmail.com
+      name: Samir Patel
+    name: web-application
+    sources:
+    - https://github.com/samirspatel/web-application
+    type: application
+    urls:
+    - web-application-1.0.0.tgz
+    version: 1.0.0
+  - apiVersion: v2
+    created: "2025-02-10T22:06:01.584151271Z"
     description: A reusable Helm chart for deploying simple web applications in Kubernetes
     digest: d5ad0c8cb6aa37d1a362a949c8449a230b435a5024b6e87c68e454fce89bf36f
     home: https://github.com/samirspatel/web-application
@@ -193,4 +240,4 @@ entries:
     urls:
     - https://github.com/samirspatel/helm-shared/releases/download/web-application-0.1.0/web-application-0.1.0.tgz
     version: 0.1.0
-generated: "2025-02-10T22:03:53.667712601Z"
+generated: "2025-02-10T22:06:01.582811398Z"
