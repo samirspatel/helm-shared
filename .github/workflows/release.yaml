@@ -79,9 +79,9 @@ jobs:
           
           # Generate new index.yaml or merge with existing
           if [ -f index.yaml ]; then
-            helm repo index . --url https://samirspatel.github.io/helm-shared --merge index.yaml
+            helm repo index . --merge index.yaml
           else
-            helm repo index . --url https://samirspatel.github.io/helm-shared
+            helm repo index .
           fi
           
           # Commit and push if there are changes
