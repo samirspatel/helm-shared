@@ -1,5 +1,40 @@
 #!/bin/bash
 
+# Check and install required tools
+check_and_install_brew() {
+    if ! command -v brew &> /dev/null; then
+        echo "🍺 Homebrew not found. Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+}
+
+check_and_install_tool() {
+    local tool=$1
+    local cask=$2
+    if ! command -v "$tool" &> /dev/null; then
+        echo "📦 $tool not found. Installing $tool..."
+        if [ "$cask" = "true" ]; then
+            brew install --cask "$tool"
+        else
+            brew install "$tool"
+        fi
+    else
+        echo "✅ $tool is already installed"
+    fi
+}
+
+# Install required tools
+check_and_install_brew
+check_and_install_tool "docker" "true"
+check_and_install_tool "k3d"
+check_and_install_tool "helm"
+
+# Check if Docker is running
+if ! docker info > /dev/null 2>&1; then
+    echo "❌ Docker is not running. Please start Docker Desktop and try again."
+    exit 1
+fi
+
 # Get the directory where the script is located
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 CHART_DIR="$SCRIPT_DIR/../charts/web-application"
@@ -68,7 +103,8 @@ echo "⏳ Waiting for application pod to be ready..."
 TIMEOUT=120  # Increased timeout to 2 minutes
 INTERVAL=10  # Check every 10 seconds
 
-for ((i=0; i<=$TIMEOUT; i+=$INTERVAL)); do
+i=0
+while [ $i -le $TIMEOUT ]; do
     if kubectl wait --for=condition=ready pod -l app.kubernetes.io/instance=my-app --timeout=${INTERVAL}s >/dev/null 2>&1; then
         echo "✅ Pod is ready!"
         break
@@ -84,6 +120,8 @@ for ((i=0; i<=$TIMEOUT; i+=$INTERVAL)); do
     if [ $((i % 30)) -eq 0 ]; then  # Show detailed status every 30 seconds
         check_pod_status
     fi
+    
+    i=$((i + INTERVAL))
 done
 
 echo "✨ Setup complete! Your cluster is ready."
