@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-    # paths:
-    #   - 'charts/**/*'  # Match any file under charts directory
-    #   - '.github/workflows/release.yaml'  # Also run when workflow file changes
+    paths:
+      - 'charts/**'  # Match any changes in charts directory
+      - '.github/workflows/release.yaml'  # Also run when workflow file changes
 
 permissions:
   contents: write
@@ -37,6 +37,8 @@ jobs:
           git log -1
           echo "\nChanged files in last commit:"
           git diff-tree --no-commit-id --name-only -r HEAD
+          echo "\nAll charts in directory:"
+          find charts -name Chart.yaml
 
       - name: Configure Git
         run: |
@@ -129,9 +131,14 @@ jobs:
             git checkout main
           fi
           
-          # Package the new chart version
-          echo "Packaging new chart version..."
-          helm package charts/web-application -d .cr-release-packages/
+          # Package all charts in the charts directory
+          echo "Packaging all charts..."
+          for chart in charts/*/; do
+            if [ -f "$chart/Chart.yaml" ]; then
+              echo "Packaging chart: $chart"
+              helm package "$chart" -d .cr-release-packages/
+            fi
+          done
           
           # Copy existing charts to release packages directory
           if [ -d ".existing-charts" ]; then
