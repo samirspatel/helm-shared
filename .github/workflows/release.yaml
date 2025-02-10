@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'charts/**/*'  # Match any file under charts directory
-      - '.github/workflows/release.yaml'  # Also run when workflow file changes
+    # paths:
+    #   - 'charts/**/*'  # Match any file under charts directory
+    #   - '.github/workflows/release.yaml'  # Also run when workflow file changes
 
 permissions:
   contents: write
@@ -92,7 +92,7 @@ jobs:
           fi
 
       - name: Install Helm
-        if: steps.check-changes.outputs.has_changes == 'true'
+        # if: steps.check-changes.outputs.has_changes == 'true'
         uses: azure/setup-helm@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -100,23 +100,66 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure GitHub Pages
-        if: steps.check-changes.outputs.has_changes == 'true'
+        # if: steps.check-changes.outputs.has_changes == 'true'
         uses: actions/configure-pages@v4
 
       - name: Package Charts
-        if: steps.check-changes.outputs.has_changes == 'true'
+        # if: steps.check-changes.outputs.has_changes == 'true'
         run: |
+          # Create directories
           mkdir -p .cr-release-packages
           mkdir -p .cr-index
-          # Package the chart
+          
+          # Download existing charts from gh-pages branch
+          echo "Downloading existing charts..."
+          git fetch origin gh-pages:gh-pages || true
+          if git show-ref --verify --quiet refs/heads/gh-pages; then
+            # Create a temporary directory for existing charts
+            mkdir -p .existing-charts
+            git checkout gh-pages -- index.yaml || true
+            if [ -f "index.yaml" ]; then
+              mv index.yaml .existing-charts/
+              # Download all existing chart packages referenced in index.yaml
+              for pkg in $(grep -oP '(?<=charts/)[^"]+\.tgz' .existing-charts/index.yaml || true); do
+                echo "Downloading existing chart: $pkg"
+                mkdir -p $(dirname ".existing-charts/$pkg")
+                curl -sL "https://samirspatel.github.io/helm-shared/$pkg" -o ".existing-charts/$pkg" || true
+              done
+            fi
+            git checkout main
+          fi
+          
+          # Package the new chart version
+          echo "Packaging new chart version..."
           helm package charts/web-application -d .cr-release-packages/
+          
+          # Copy existing charts to release packages directory
+          if [ -d ".existing-charts" ]; then
+            echo "Copying existing charts..."
+            cp -r .existing-charts/* .cr-release-packages/ || true
+          fi
+          
           # Create or update the index
-          helm repo index .cr-release-packages/ --url https://samirspatel.github.io/helm-shared
-          # Copy the index to both locations
+          echo "Updating Helm repository index..."
+          if [ -f ".existing-charts/index.yaml" ]; then
+            echo "Merging with existing index..."
+            helm repo index .cr-release-packages/ --url https://samirspatel.github.io/helm-shared --merge .existing-charts/index.yaml
+          else
+            echo "Creating new index..."
+            helm repo index .cr-release-packages/ --url https://samirspatel.github.io/helm-shared
+          fi
+          
+          # Copy the index
           cp .cr-release-packages/index.yaml .cr-index/index.yaml
+          
+          # Debug output
+          echo "Contents of .cr-release-packages:"
+          ls -la .cr-release-packages/
+          echo "Chart versions in index.yaml:"
+          grep -A 2 "version:" .cr-release-packages/index.yaml
 
       - name: Create Pages Directory
-        if: steps.check-changes.outputs.has_changes == 'true'
+        # if: steps.check-changes.outputs.has_changes == 'true'
         run: |
           mkdir -p .cr-pages
           
@@ -289,13 +332,13 @@ jobs:
           ls -la .cr-pages/
 
       - name: Upload Pages Artifact
-        if: steps.check-changes.outputs.has_changes == 'true'
+        # if: steps.check-changes.outputs.has_changes == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: .cr-pages
 
       - name: Deploy to GitHub Pages
-        if: steps.check-changes.outputs.has_changes == 'true'
+        # if: steps.check-changes.outputs.has_changes == 'true'
         id: deployment
         uses: actions/deploy-pages@v4
         with:
