@@ -2,7 +2,31 @@ apiVersion: v1
 entries:
   background-job:
   - apiVersion: v2
-    created: "2025-02-10T22:07:05.143596191Z"
+    created: "2025-02-10T22:23:31.861057057Z"
+    description: A reusable Helm chart for deploying background jobs in Kubernetes
+    digest: de5fc7c401dcabf7a5a0cf12ca44f0c16975f910b1287b0c83259bbcd1d31dad
+    home: https://github.com/samirspatel/helm-shared
+    keywords:
+    - job
+    - cronjob
+    - background
+    - batch
+    - kubernetes
+    - helm
+    - shared
+    - reusable
+    maintainers:
+    - email: sameg14@gmail.com
+      name: Samir Patel
+    name: background-job
+    sources:
+    - https://github.com/samirspatel/helm-shared
+    type: application
+    urls:
+    - background-job-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    created: "2025-02-10T22:23:31.860697014Z"
     description: A reusable Helm chart for deploying background jobs in Kubernetes
     digest: bfb1e3ca57660e818b7481db4c5c67f0f7ab54fa7f8fab7b8d7255a112468608
     home: https://github.com/samirspatel/helm-shared
@@ -26,7 +50,7 @@ entries:
     - background-job-0.6.0.tgz
     version: 0.6.0
   - apiVersion: v2
-    created: "2025-02-10T22:07:05.143192082Z"
+    created: "2025-02-10T22:23:31.860362991Z"
     description: A reusable Helm chart for deploying background jobs in Kubernetes
     digest: c910a641c9eb62baddf70b6373ad31851b4298e81d9017ad019ff8f206b00b46
     home: https://github.com/samirspatel/helm-shared
@@ -100,9 +124,9 @@ entries:
     version: 0.2.0
   web-application:
   - apiVersion: v2
-    created: "2025-02-10T22:07:05.144336725Z"
+    created: "2025-02-10T22:23:31.861937141Z"
     description: A reusable Helm chart for deploying simple web applications in Kubernetes
-    digest: c9cb59febdc1e1612032fa47f4dbf1ac56d23a2326df9bcb8e6bc6619c4866a4
+    digest: 4c031c20b790751653e21a82890744c471e6ecd2f3a6fb427d77e9b840a1f094
     home: https://github.com/samirspatel/web-application
     keywords:
     - web
@@ -123,7 +147,7 @@ entries:
     - web-application-1.0.0.tgz
     version: 1.0.0
   - apiVersion: v2
-    created: "2025-02-10T22:07:05.143959155Z"
+    created: "2025-02-10T22:23:31.861466352Z"
     description: A reusable Helm chart for deploying simple web applications in Kubernetes
     digest: d5ad0c8cb6aa37d1a362a949c8449a230b435a5024b6e87c68e454fce89bf36f
     home: https://github.com/samirspatel/web-application
@@ -240,4 +264,4 @@ entries:
     urls:
     - https://github.com/samirspatel/helm-shared/releases/download/web-application-0.1.0/web-application-0.1.0.tgz
     version: 0.1.0
-generated: "2025-02-10T22:07:05.142704769Z"
+generated: "2025-02-10T22:23:31.859898453Z"
