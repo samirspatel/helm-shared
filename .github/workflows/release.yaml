@@ -81,9 +81,9 @@ jobs:
           
           # Generate new index.yaml or merge with existing
           if [ -f index.yaml ]; then
-            helm repo index . --merge index.yaml
+            helm repo index . --merge index.yaml --url https://github.com/samirspatel/helm-shared/raw/refs/heads/gh-pages/
           else
-            helm repo index .
+            helm repo index . --url https://github.com/samirspatel/helm-shared/raw/refs/heads/gh-pages/
           fi
           
           # Commit and push if there are changes
