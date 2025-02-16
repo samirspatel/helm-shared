@@ -21,14 +21,15 @@ A reusable Helm chart for deploying web applications on Kubernetes. This chart p
 Add the Helm repository:
 
 ```bash
-helm repo add helm-shared https://samirspatel.github.io/helm-shared
+# helm repo add helm-shared https://samirspatel.github.io/helm-shared
+helm repo add helm-shared https://raw.githubusercontent.com/samirspatel/helm-shared/refs/heads/gh-pages
 helm repo update
 ```
 
 Install the chart:
 
 ```bash
-helm upgrade --install my-app helm-shared/web-application --set fullnameOverride=my-app
+helm upgrade --install my-web-app helm-shared/web-application --set fullnameOverride=my-web-app
 ```
 
 ## Example Usage
@@ -40,7 +41,7 @@ deployment:
   name: my-web-app
   replicas: 2
   image:
-    repository: docker.io/my-web-app
+    repository: docker.io/myorg/my-web-app
     tag: 1.2.3
 
 service:

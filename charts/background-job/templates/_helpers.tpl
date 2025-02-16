@@ -73,6 +73,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  restartPolicy: {{ .Values.pod.restartPolicy | default "Never" }}
   {{- with .Values.pod.securityContext }}
   securityContext:
     {{- toYaml . | nindent 4 }}
