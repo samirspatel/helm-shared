@@ -8,6 +8,22 @@ metadata:
     {{- with .Values.pod.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+  annotations:
+    ad.datadoghq.com/cronjob.check_names: '["cronjob"]'
+    ad.datadoghq.com/cronjob.init_configs: '[{}]'
+    ad.datadoghq.com/cronjob.instances: |
+      [{
+        "name": "{{ include "background-job.fullname" . }}",
+        "tags": [
+          "cronjob_name:{{ include "background-job.fullname" . }}",
+          "helm_chart:{{ include "background-job.chart" . }}",
+          "kubernetes_namespace:{{ .Release.Namespace }}",
+          "schedule:{{ .Values.cronjob.schedule }}"
+        ]
+      }]
+    {{- with .Values.pod.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   schedule: {{ .Values.cronjob.schedule | quote }}
   {{- if .Values.cronjob.timezone }}

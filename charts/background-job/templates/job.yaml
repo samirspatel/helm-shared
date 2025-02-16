@@ -8,6 +8,21 @@ metadata:
     {{- with .Values.pod.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
+  annotations:
+    ad.datadoghq.com/job.check_names: '["job"]'
+    ad.datadoghq.com/job.init_configs: '[{}]'
+    ad.datadoghq.com/job.instances: |
+      [{
+        "name": "{{ include "background-job.fullname" . }}",
+        "tags": [
+          "job_name:{{ include "background-job.fullname" . }}",
+          "helm_chart:{{ include "background-job.chart" . }}",
+          "kubernetes_namespace:{{ .Release.Namespace }}"
+        ]
+      }]
+    {{- with .Values.pod.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   backoffLimit: {{ .Values.job.backoffLimit }}
   {{- if .Values.job.activeDeadlineSeconds }}
