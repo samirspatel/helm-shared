@@ -27,6 +27,15 @@ deployment:
   # Additional labels
   labels: {}
 
+  # Datadog service monitoring labels
+  datadogLabels:
+    enabled: true
+    service: web-application
+    version: "" # Will default to Chart.AppVersion if not set
+    env: "local" # Will be set based on deployment environment
+    team: "devops" # Team owning the service
+    tags: {} # Additional custom tags
+
   # Probe configurations
   livenessProbe:
     enabled: true

@@ -4,6 +4,17 @@ metadata:
   name: {{ include "web-application.fullname" . }}
   labels:
     {{- include "web-application.labels" . | nindent 4 }}
+    {{- if .Values.deployment.datadogLabels.enabled }}
+    tags.datadoghq.com/service: {{ .Values.deployment.datadogLabels.service | default (include "web-application.fullname" .) }}
+    tags.datadoghq.com/version: {{ .Values.deployment.datadogLabels.version | default (.Values.appVersion | default .Chart.AppVersion) | quote }}
+    tags.datadoghq.com/env: {{ .Values.deployment.datadogLabels.env | default .Release.Namespace }}
+    {{- if .Values.deployment.datadogLabels.team }}
+    tags.datadoghq.com/team: {{ .Values.deployment.datadogLabels.team }}
+    {{- end }}
+    {{- range $key, $value := .Values.deployment.datadogLabels.tags }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- end }}
     {{- with .Values.deployment.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -16,6 +27,17 @@ spec:
     metadata:
       labels:
         {{- include "web-application.selectorLabels" . | nindent 8 }}
+        {{- if .Values.deployment.datadogLabels.enabled }}
+        tags.datadoghq.com/service: {{ .Values.deployment.datadogLabels.service | default (include "web-application.fullname" .) }}
+        tags.datadoghq.com/version: {{ .Values.deployment.datadogLabels.version | default (.Values.appVersion | default .Chart.AppVersion) | quote }}
+        tags.datadoghq.com/env: {{ .Values.deployment.datadogLabels.env | default .Release.Namespace }}
+        {{- if .Values.deployment.datadogLabels.team }}
+        tags.datadoghq.com/team: {{ .Values.deployment.datadogLabels.team }}
+        {{- end }}
+        {{- range $key, $value := .Values.deployment.datadogLabels.tags }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+        {{- end }}
         {{- with .Values.deployment.labels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
