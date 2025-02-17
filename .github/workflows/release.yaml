@@ -94,3 +94,33 @@ jobs:
             git commit -m "Updating Helm repository"
             git push origin gh-pages
           fi
+
+      - name: Install yq
+        run: |
+          wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq
+          chmod +x /usr/local/bin/yq
+
+      - name: Generate Chart Versions Table
+        run: |
+          echo "# Helm Charts" > CHARTS.md
+          echo "" >> CHARTS.md
+          echo "| Chart | Version | App Version | Description |" >> CHARTS.md
+          echo "|-------|---------|-------------|-------------|" >> CHARTS.md
+          
+          for chart in charts/*/Chart.yaml; do
+            name=$(yq e '.name' "$chart")
+            version=$(yq e '.version' "$chart")
+            appVersion=$(yq e '.appVersion // "N/A"' "$chart")
+            description=$(yq e '.description' "$chart")
+            echo "| $name | $version | $appVersion | $description |" >> CHARTS.md
+          done
+
+          # Commit and push the updated CHARTS.md
+          git add CHARTS.md
+          if git diff --staged --quiet; then
+            echo "No changes to CHARTS.md"
+          else
+            git commit -m "docs: update chart versions table"
+            git push origin main
+          fi
+  
