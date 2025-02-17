@@ -102,25 +102,18 @@ jobs:
 
       - name: Generate Chart Versions Table
         run: |
-          echo "# Helm Charts" > CHARTS.md
-          echo "" >> CHARTS.md
-          echo "| Chart | Version | App Version | Description |" >> CHARTS.md
-          echo "|-------|---------|-------------|-------------|" >> CHARTS.md
-          
-          for chart in charts/*/Chart.yaml; do
-            name=$(yq e '.name' "$chart")
-            version=$(yq e '.version' "$chart")
-            appVersion=$(yq e '.appVersion // "N/A"' "$chart")
-            description=$(yq e '.description' "$chart")
-            echo "| $name | $version | $appVersion | $description |" >> CHARTS.md
-          done
-
-          # Commit and push the updated CHARTS.md
-          git add CHARTS.md
-          if git diff --staged --quiet; then
-            echo "No changes to CHARTS.md"
-          else
-            git commit -m "docs: update chart versions table"
-            git push origin main
-          fi
+          {
+            echo "# Helm Charts"
+            echo ""
+            echo "| Chart | Version | App Version | Description |"
+            echo "|-------|---------|-------------|-------------|"
+            
+            for chart in charts/*/Chart.yaml; do
+              name=$(yq e '.name' "$chart")
+              version=$(yq e '.version' "$chart")
+              appVersion=$(yq e '.appVersion // "N/A"' "$chart")
+              description=$(yq e '.description' "$chart")
+              echo "| $name | $version | $appVersion | $description |"
+            done
+          } >> $GITHUB_STEP_SUMMARY
   
