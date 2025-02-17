@@ -132,3 +132,5 @@ echo "  kubectl get pods,svc,ingress    # Check resources"
 echo "  kubectl logs -l app.kubernetes.io/instance=my-app    # Check logs"
 echo "  helm list    # List Helm releases"
 echo "  kubectl port-forward svc/my-app 8080:80  # Access directly via port-forward" 
+
+open http://web-application.local

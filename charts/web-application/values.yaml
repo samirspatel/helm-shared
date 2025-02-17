@@ -11,7 +11,7 @@ deployment:
   image:
     repository: crccheck/hello-world
     tag: latest
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
 
   resources:
     requests:
